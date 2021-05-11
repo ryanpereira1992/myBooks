@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using myBooks.ActionResults;
 using myBooks.Data.Models;
 using myBooks.Data.Services;
@@ -17,13 +18,15 @@ namespace myBooks.Controllers
     public class PublishersController : ControllerBase
     {
         private PublisherService _publisherService;
-        public PublishersController(PublisherService publisherService)
+        private readonly ILogger<PublishersController> _logger;
+        public PublishersController(PublisherService publisherService, ILogger<PublishersController> logger)
         {
             _publisherService = publisherService;
+            _logger = logger;
         }
 
         // Normal GET ALL Method
-        //[HttpGet("get-add-publishers")]
+        //[HttpGet("get-all-publishers")]
         //public IActionResult GetAllPublishers()
         //{
         //    try
@@ -40,7 +43,7 @@ namespace myBooks.Controllers
 
 
         // Sorting Feature Only with GET ALL Method
-        //[HttpGet("get-add-publishers")]
+        //[HttpGet("get-all-publishers")]
         //public IActionResult GetAllPublishers(string sortBy)
         //{
         //    try
@@ -56,7 +59,7 @@ namespace myBooks.Controllers
 
 
         // Filtering & Sorting Feature for GET ALL Method
-        //[HttpGet("get-add-publishers")]
+        //[HttpGet("get-all-publishers")]
         //public IActionResult GetAllPublishers(string sortBy, string searchString)
         //{
         //    try
@@ -70,11 +73,14 @@ namespace myBooks.Controllers
         //    }
         //}
 
-        [HttpGet("get-add-publishers")]
+        [HttpGet("get-all-publishers")]
         public IActionResult GetAllPublishers(string sortBy, string searchString, int pageNumber)
         {
+            //throw new Exception("This is an exception from get all new publishers"); // Forced  Exception for testing logs
+
             try
             {
+                _logger.LogInformation("This is just a log in GetAllPublishers()");
                 var _result = _publisherService.GetAllPublishers(sortBy, searchString, pageNumber);
                 return Ok(_result);
             }

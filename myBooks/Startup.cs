@@ -44,6 +44,7 @@ namespace myBooks
             services.AddTransient<BooksService>();
             services.AddTransient<AuthorService>();
             services.AddTransient<PublisherService>();
+            services.AddTransient<LogsService>();
 
             //Versioning
             //services.AddApiVersioning(config => 
@@ -61,7 +62,7 @@ namespace myBooks
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -78,9 +79,9 @@ namespace myBooks
 
             // Exception Handling
 
-            //app.ConfigureBuildInExceptionHandler();
+            app.ConfigureBuildInExceptionHandler(loggerFactory);
 
-            app.ConfigureCustomExceptionHandler();
+            //app.ConfigureCustomExceptionHandler();
 
             app.UseEndpoints(endpoints =>
             {
